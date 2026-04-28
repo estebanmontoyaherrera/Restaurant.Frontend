@@ -1,0 +1,53 @@
+<ngx-spinner
+  [fullScreen]="true"
+  bdColor="rgb(70, 84, 153, 0.3)"
+  size="medium"
+  name="carga"
+  color="#7084E3"
+  type="ball-clip-rotate-pulse"
+>
+</ngx-spinner>
+<form [formGroup]="userRole">
+  <h2 mat-dialog-title>
+    <strong class="text-am-main-blue-dark">
+      {{
+        data.mode == "create"
+          ? "Nuevo rol de usuario"
+          : "Actualizar rol de usuario"
+      }}
+    </strong>
+  </h2>
+  <mat-dialog-content>
+    <gs-select
+      label="Usuario"
+      [mode]="mode"
+      placeholder="Seleccionar usuario"
+      [aOptions]="users$"
+      [inputControl]="userRole.get('userId')"
+    />
+    <gs-select
+      label="Rol"
+      [mode]="mode"
+      placeholder="Seleccionar rol"
+      [aOptions]="roles$"
+      [inputControl]="userRole.get('roleId')"
+    />
+    <gs-select
+      label="Estado"
+      [mode]="mode"
+      placeholder="Seleccionar estado"
+      [aOptions]="states$"
+      [inputControl]="userRole.get('state')"
+    />
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button
+      mat-button
+      [class]="{ 'cursor-not-allowed': !userRole.valid }"
+      (click)="userRole.valid ? userRoleSave() : userRole.markAllAsTouched()"
+    >
+      Guardar
+    </button>
+  </mat-dialog-actions>
+</form>

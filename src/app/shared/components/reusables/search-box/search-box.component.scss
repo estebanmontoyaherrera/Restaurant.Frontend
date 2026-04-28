@@ -1,0 +1,31 @@
+input.open {
+    min-width: 190px;
+    opacity: 1;
+  }
+  
+  input {
+    min-width: 0;
+    width: 30px;
+    transition: min-width 0.7s, opacity 0.7s;
+    opacity: 0;
+  }
+  
+  input.desktop {
+    min-width: 250px;
+    opacity: 1;
+  }
+  
+  button[type="submit"]:disabled {
+    opacity: 0.2;
+    cursor: default;
+  }
+  
+  .main-label-101 {
+    min-width: 101px;
+  }
+  
+  .prueba {
+    transition: 0.5s linear all;
+    opacity: 0;
+  }
+  

@@ -1,0 +1,70 @@
+<div
+  class="max-w-screen-160 mx-auto h-full flex flex-col px-10 py-6 gap-4 mt-6"
+>
+  <div class="flex justify-between flex-wrap gap-4">
+    <div class="flex items-center">
+      <mat-icon
+        @scaleIn
+        class="text-2xl text-am-main-blue"
+        [fontIcon]="iconUserRole$"
+      >
+      </mat-icon>
+      <div
+        @fadeInRight
+        class="text-3xl font-medium italic text-am-main-blue-dark ml-2"
+      >
+        Rol de usuarios
+      </div>
+    </div>
+    <div class="flex gap-2 items-center w-full smd:w-fit justify-end flex-wrap">
+      <div class="w-full sm:w-fit">
+        <app-search-box
+          [searchOptions]="componentUserRole$.searchOptions"
+          (search)="search($event)"
+          [currentValue]="componentUserRole$.filters.textFilter"
+        />
+      </div>
+      <div>
+        <app-export-excel
+          [url]="getDownloadUrl"
+          [getInputs]="componentUserRole$.getInputs"
+          [filename]="componentUserRole$.filename"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="flex gap-2 justify-between flex-wrap">
+    <div class="flex gap-2 items-end flex-wrap">
+      <div>
+        <app-filter-menu-states
+          [menuFilter]="componentUserRole$.menuItems"
+          [initfilters]="componentUserRole$.filters.stateFilter"
+          [reset]="resetChecks"
+          (dataChecked)="setDataFilterStates($event)"
+        />
+      </div>
+      <div>
+        <app-split-button
+          [configButtons]="componentUserRole$.filterButtons"
+          (doThisFunction)="resetButton($event)"
+        />
+      </div>
+    </div>
+    <div class="flex gap-2 items-end">
+      <app-generic-button
+        [infoButton]="componentUserRole$.actionButtonUserRole"
+        (clickButton)="newUserRole()"
+      />
+    </div>
+  </div>
+  <div class="card h-full shadow-xl rounded-3xl overflow-hidden flex-auto">
+    <app-list-table
+      (rowClick)="rowClick($event)"
+      [service]="userRoleService"
+      [columns]="componentUserRole$.tableColumns"
+      [sortBy]="componentUserRole$.initialSort"
+      [sortDir]="componentUserRole$.initalSortDir"
+      [getInputs]="componentUserRole$.getInputs"
+    />
+  </div>
+</div>

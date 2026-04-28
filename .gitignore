@@ -1,0 +1,9 @@
+node_modules/
+.angular/
+dist/
+.vscode/
+.history/
+bin/
+obj/
+*.log
+.env
