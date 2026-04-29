@@ -39,6 +39,27 @@ const childrenRoutes: Routes = [
         './pages/user-role/components/user-role-list/user-role-list.component'
       ).then((c) => c.UserRoleListComponent),
   },
+  {
+    path: 'dishes',
+    loadComponent: () =>
+      import('./pages/dish/components/dish-list/dish-list.component').then(
+        (c) => c.DishListComponent
+      ),
+  },
+  {
+    path: 'orders',
+    loadComponent: () =>
+      import('./pages/order/components/order-list/order-list.component').then(
+        (c) => c.OrderListComponent
+      ),
+  },
+  {
+    path: 'reports',
+    loadComponent: () =>
+      import('./pages/report/components/sales-report/sales-report.component').then(
+        (c) => c.SalesReportComponent
+      ),
+  },
 ];
 
 export const routes: Routes = [

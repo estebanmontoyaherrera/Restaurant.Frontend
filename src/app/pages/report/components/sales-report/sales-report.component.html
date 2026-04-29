@@ -1,0 +1,143 @@
+<div
+  class="max-w-screen-160 mx-auto h-full flex flex-col px-10 py-6 gap-4 mt-6"
+>
+  <div class="flex justify-between flex-wrap gap-4">
+    <div class="flex items-center">
+      <mat-icon
+        @scaleIn
+        class="text-2xl text-am-main-blue"
+        [fontIcon]="iconReport$"
+      >
+      </mat-icon>
+      <div
+        @fadeInRight
+        class="text-3xl font-medium italic text-am-main-blue-dark ml-2"
+      >
+        Reportes
+      </div>
+    </div>
+    <div class="flex gap-2 items-end flex-wrap">
+      <app-filter-date-range-ymd
+        label="Rango de ventas"
+        [start]="startDate"
+        [end]="endDate"
+        (rangeDate)="setDateRange($event)"
+      />
+      <button
+        mat-button
+        class="rounded-2xl h-11 button-filter text-am-main-blue-dark"
+        type="button"
+        (click)="resetFilters()"
+      >
+        Limpiar
+      </button>
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="bg-white rounded-3xl shadow-xl p-8 text-center text-am-gray">
+      Cargando reporte...
+    </div>
+  }
+
+  @if (!loading) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white rounded-2xl shadow p-5 border border-am-main-blue-light">
+        <div class="text-xs text-am-gray">Ventas totales</div>
+        <div class="text-2xl font-bold text-am-main-blue-dark">
+          {{ report.totalSales | currency : "USD" : "symbol" : "1.0-2" }}
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl shadow p-5 border border-am-main-blue-light">
+        <div class="text-xs text-am-gray">Ordenes vendidas</div>
+        <div class="text-2xl font-bold text-am-main-blue-dark">
+          {{ report.totalOrders }}
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl shadow p-5 border border-am-main-blue-light">
+        <div class="text-xs text-am-gray">Ticket promedio</div>
+        <div class="text-2xl font-bold text-am-main-blue-dark">
+          {{ report.averageTicket | currency : "USD" : "symbol" : "1.0-2" }}
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl shadow p-5 border border-am-main-blue-light">
+        <div class="text-xs text-am-gray">Plato mas vendido</div>
+        <div class="text-lg font-bold text-am-main-blue-dark truncate">
+          {{ report.bestSellingDish || "-" }}
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+      <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+        <div class="px-5 py-4 border-b border-am-main-blue-light">
+          <div class="text-lg font-bold text-am-main-blue-dark">
+            Ventas por categoria
+          </div>
+        </div>
+        <div class="overflow-auto">
+          <table class="w-full">
+            <thead class="bg-am-main-blue-light">
+              <tr>
+                <th class="text-left text-xs font-bold p-3 text-am-main-blue-dark">Categoria</th>
+                <th class="text-left text-xs font-bold p-3 text-am-main-blue-dark">Cantidad</th>
+                <th class="text-left text-xs font-bold p-3 text-am-main-blue-dark">Ventas</th>
+                <th class="text-left text-xs font-bold p-3 text-am-main-blue-dark">%</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (category of report.salesByCategory; track category.category) {
+                <tr class="border-t border-am-main-blue-light">
+                  <td class="text-xs p-3 font-bold">{{ category.category }}</td>
+                  <td class="text-xs p-3">{{ category.quantitySold }}</td>
+                  <td class="text-xs p-3 font-bold">
+                    {{ category.totalSales | currency : "USD" : "symbol" : "1.0-2" }}
+                  </td>
+                  <td class="text-xs p-3">{{ category.percentageOfTotal }}%</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          @if (!report.salesByCategory.length) {
+            <div class="p-8 text-center text-am-gray">No hay ventas en este rango.</div>
+          }
+        </div>
+      </div>
+
+      <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+        <div class="px-5 py-4 border-b border-am-main-blue-light">
+          <div class="text-lg font-bold text-am-main-blue-dark">
+            Ventas por plato
+          </div>
+        </div>
+        <div class="overflow-auto">
+          <table class="w-full">
+            <thead class="bg-am-main-blue-light">
+              <tr>
+                <th class="text-left text-xs font-bold p-3 text-am-main-blue-dark">Plato</th>
+                <th class="text-left text-xs font-bold p-3 text-am-main-blue-dark">Categoria</th>
+                <th class="text-left text-xs font-bold p-3 text-am-main-blue-dark">Cantidad</th>
+                <th class="text-left text-xs font-bold p-3 text-am-main-blue-dark">Ventas</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (dish of report.salesByDish; track dish.name) {
+                <tr class="border-t border-am-main-blue-light">
+                  <td class="text-xs p-3 font-bold">{{ dish.name }}</td>
+                  <td class="text-xs p-3">{{ dish.category }}</td>
+                  <td class="text-xs p-3">{{ dish.quantitySold }}</td>
+                  <td class="text-xs p-3 font-bold">
+                    {{ dish.totalSales | currency : "USD" : "symbol" : "1.0-2" }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          @if (!report.salesByDish.length) {
+            <div class="p-8 text-center text-am-gray">No hay ventas en este rango.</div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -33,4 +33,18 @@ export class SelectsService {
         })
       );
   }
+
+  listDishSelect(): Observable<SelectResponse[]> {
+    const requestUrl = `${env.apiIdentity}${endpoint.DISH_SELECT}`;
+    return this.httpClient
+      .get<BaseApiResponse<SelectResponse[]>>(requestUrl)
+      .pipe(map((resp) => resp.data));
+  }
+
+  listOrderSelect(): Observable<SelectResponse[]> {
+    const requestUrl = `${env.apiIdentity}${endpoint.ORDER_SELECT}`;
+    return this.httpClient
+      .get<BaseApiResponse<SelectResponse[]>>(requestUrl)
+      .pipe(map((resp) => resp.data));
+  }
 }

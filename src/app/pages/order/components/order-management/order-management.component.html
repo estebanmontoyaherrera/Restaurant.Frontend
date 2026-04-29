@@ -1,0 +1,73 @@
+<ngx-spinner
+  [fullScreen]="true"
+  bdColor="rgb(70, 84, 153, 0.3)"
+  size="medium"
+  name="carga"
+  color="#7084E3"
+  type="ball-clip-rotate-pulse"
+>
+</ngx-spinner>
+<form [formGroup]="order">
+  <h2 mat-dialog-title>
+    <strong class="text-am-main-blue-dark">
+      {{ data.mode == "create" ? "Nueva orden" : "Actualizar orden" }}
+    </strong>
+  </h2>
+  <mat-dialog-content>
+    <div class="flex flex-col gap-3">
+      <div>
+        <div class="text-am-purple md:text-sm text-xs">
+          Mesa
+          <span class="text-red">*</span>
+        </div>
+        <mat-form-field appearance="outline" class="w-full">
+          <input
+            matInput
+            type="number"
+            min="1"
+            max="50"
+            formControlName="tableNumber"
+            autocomplete="off"
+          />
+          @if (order.get('tableNumber')?.hasError('required')) {
+            <mat-error>*Este campo es obligatorio.</mat-error>
+          }
+          @if (order.get('tableNumber')?.hasError('min') || order.get('tableNumber')?.hasError('max')) {
+            <mat-error>*La mesa debe estar entre 1 y 50.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <gs-text
+        label="Camarero"
+        [mode]="mode"
+        [required]="true"
+        [inputControl]="order.get('waiterName')"
+      />
+      @if (mode == "update") {
+        <div>
+          <div class="text-am-purple md:text-sm text-xs">Estado pedido</div>
+          <div class="bg-am-main-blue-light rounded-2xl px-4 py-3 text-sm font-semibold text-am-main-blue-dark">
+            {{ order.get("status")?.value }}
+          </div>
+        </div>
+        <gs-select
+          label="Estado"
+          [mode]="mode"
+          placeholder="Seleccionar estado"
+          [aOptions]="states$"
+          [inputControl]="order.get('state')"
+        />
+      }
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button
+      mat-button
+      [class]="{ 'cursor-not-allowed': !order.valid }"
+      (click)="order.valid ? orderSave() : order.markAllAsTouched()"
+    >
+      Guardar
+    </button>
+  </mat-dialog-actions>
+</form>

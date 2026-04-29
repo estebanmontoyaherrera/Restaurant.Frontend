@@ -1,0 +1,82 @@
+<ngx-spinner
+  [fullScreen]="true"
+  bdColor="rgb(70, 84, 153, 0.3)"
+  size="medium"
+  name="carga"
+  color="#7084E3"
+  type="ball-clip-rotate-pulse"
+>
+</ngx-spinner>
+<form [formGroup]="dish">
+  <h2 mat-dialog-title>
+    <strong class="text-am-main-blue-dark">
+      {{ data.mode == "create" ? "Nuevo plato" : "Actualizar plato" }}
+    </strong>
+  </h2>
+  <mat-dialog-content>
+    <div class="flex flex-col gap-3">
+      <gs-text
+        label="Nombre"
+        [mode]="mode"
+        [required]="true"
+        [inputControl]="dish.get('name')"
+      />
+      <gs-text
+        label="Descripcion"
+        [mode]="mode"
+        [inputControl]="dish.get('description')"
+        [maxLength]="250"
+      />
+      <div>
+        <div class="text-am-purple md:text-sm text-xs">
+          Precio
+          <span class="text-red">*</span>
+        </div>
+        <mat-form-field appearance="outline" class="w-full">
+          <input
+            matInput
+            type="number"
+            min="0.01"
+            step="0.01"
+            formControlName="price"
+            autocomplete="off"
+          />
+          @if (dish.get('price')?.hasError('required')) {
+            <mat-error>*Este campo es obligatorio.</mat-error>
+          }
+          @if (dish.get('price')?.hasError('min')) {
+            <mat-error>*El precio debe ser mayor que cero.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <gs-text
+        label="Categoria"
+        [mode]="mode"
+        [required]="true"
+        [inputControl]="dish.get('category')"
+      />
+      @if (mode == "update") {
+        <mat-checkbox formControlName="isAvailable">
+          Disponible
+        </mat-checkbox>
+        <gs-select
+          label="Estado"
+          [mode]="mode"
+          placeholder="Seleccionar estado"
+          [aOptions]="states$"
+          [inputControl]="dish.get('state')"
+        />
+      }
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button
+      mat-button
+      [class]="{ 'cursor-not-allowed': !dish.valid }"
+      (click)="dish.valid ? dishSave() : dish.markAllAsTouched()"
+    >
+      Guardar
+    </button>
+  </mat-dialog-actions>
+</form>

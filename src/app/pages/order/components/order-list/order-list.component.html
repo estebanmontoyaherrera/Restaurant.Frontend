@@ -1,0 +1,73 @@
+<div
+  class="max-w-screen-160 mx-auto h-full flex flex-col px-10 py-6 gap-4 mt-6"
+>
+  <div class="flex justify-between flex-wrap gap-4">
+    <div class="flex items-center">
+      <mat-icon
+        @scaleIn
+        class="text-2xl text-am-main-blue"
+        [fontIcon]="iconOrder$"
+      >
+      </mat-icon>
+      <div
+        @fadeInRight
+        class="text-3xl font-medium italic text-am-main-blue-dark ml-2"
+      >
+        Ordenes
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-2 items-center justify-end w-full sm:w-auto">
+      <app-export-excel
+        [url]="getDownloadUrlExcel"
+        [getInputs]="componentOrder$.getInputs"
+        [filename]="componentOrder$.filename"
+      />
+      <app-export-pdf
+        [url]="getDownloadUrlPdf"
+        [getInputs]="componentOrder$.getInputs"
+        [filename]="componentOrder$.filename"
+      />
+    </div>
+  </div>
+  <div class="flex gap-2 justify-between flex-wrap">
+    <div class="flex gap-2 items-end flex-wrap">
+      <app-search-box
+        [searchOptions]="componentOrder$.searchOptions"
+        (search)="search($event)"
+        [currentValue]="componentOrder$.filters.waiterName"
+      />
+      <app-filter-menu-states
+        [menuFilter]="componentOrder$.menuItems"
+        [initfilters]="componentOrder$.filters.stateFilter"
+        [reset]="resetChecks"
+        (dataChecked)="setDataFilterStates($event)"
+      />
+      <app-filter-date-range-ymd
+        label="Fecha de creacion"
+        [start]="componentOrder$.filters.startDate"
+        [end]="componentOrder$.filters.endDate"
+        (rangeDate)="setDateRange($event)"
+      />
+      <app-split-button
+        [configButtons]="componentOrder$.filterButtons"
+        (doThisFunction)="resetButton($event)"
+      />
+    </div>
+    <div class="flex gap-2 items-end">
+      <app-generic-button
+        [infoButton]="componentOrder$.actionButtonOrder"
+        (clickButton)="newOrder()"
+      />
+    </div>
+  </div>
+  <div class="card h-full shadow-xl rounded-3xl overflow-hidden flex-auto">
+    <app-list-table
+      (rowClick)="rowClick($event)"
+      [service]="orderService"
+      [columns]="componentOrder$.tableColumns"
+      [sortBy]="componentOrder$.initialSort"
+      [sortDir]="componentOrder$.initalSortDir"
+      [getInputs]="componentOrder$.getInputs"
+    />
+  </div>
+</div>
