@@ -82,10 +82,20 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.swal2-container {
-  z-index: 100000 !important;
+
+
+/* --- SOLUCIÓN PARA ELEMENTOS DETRÁS DEL MODAL --- */
+
+/* Habilita interacción dentro del contenedor de Material */
+.cdk-global-overlay-wrapper .swal2-container {
+  pointer-events: auto !important;
 }
 
-.swal-over-dialog {
+.swal2-container {
   z-index: 2147483647 !important;
+}
+
+/* Evitamos que el fondo se duplique u oscurezca de más */
+.swal2-backdrop-show {
+  background: rgba(0, 0, 0, 0.4) !important;
 }

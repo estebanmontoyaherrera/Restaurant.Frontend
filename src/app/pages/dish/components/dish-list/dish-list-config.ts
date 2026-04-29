@@ -121,22 +121,7 @@ const tableColumns: TableColumns<DishResponse>[] = [
     visible: true,
     download: true,
   },
-  {
-    label: 'Estado',
-    cssLabel: [
-      'font-bold',
-      'text-sm',
-      'text-am-main-blue-dark',
-      'mat-sort-header-text-center',
-    ],
-    property: 'stateDescription',
-    cssProperty: [],
-    type: 'simpleBadge',
-    sticky: false,
-    sort: false,
-    visible: true,
-    download: true,
-  },
+ 
 ];
 
 const actionButtonDish: GenericButton = {
@@ -147,8 +132,16 @@ const actionButtonDish: GenericButton = {
 
 const searchOptions = [
   {
-    label: 'Categoria',
+    label: 'Nombre',
     value: 1,
+    placeholder: 'Buscar por nombre',
+    validation: [GenericValidators.defaultDescription],
+    validation_desc: 'Permite busqueda por nombre.',
+    icon: 'tune',
+  },
+  {
+    label: 'Categoria',
+    value: 2,
     placeholder: 'Buscar por categoria',
     validation: [GenericValidators.defaultDescription],
     validation_desc: 'Permite busqueda por categoria.',
@@ -196,12 +189,14 @@ const filterButtons: SplitButton[] = [
 ];
 
 const initFilters = {
+  name: '',
   category: '',
   stateFilter: STATUS.ENABLED + '-' + STATUS.DISABLED,
   refresh: false,
 };
 
 const filters = {
+  name: '',
   category: '',
   stateFilter: STATUS.ENABLED + '-' + STATUS.DISABLED,
   refresh: false,

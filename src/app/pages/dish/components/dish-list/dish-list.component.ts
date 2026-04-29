@@ -50,6 +50,10 @@ export class DishListComponent {
   formatGetInputs() {
     let str = '';
 
+    if (this.componentDish$.filters.name) {
+      str += `&name=${this.componentDish$.filters.name}`;
+    }
+
     if (this.componentDish$.filters.category) {
       str += `&category=${this.componentDish$.filters.category}`;
     }
@@ -68,7 +72,13 @@ export class DishListComponent {
   }
 
   search(data: SearchBox) {
-    this.componentDish$.filters.category = data.searchData;
+    if (data.searchValue === 1) {
+      this.componentDish$.filters.name = data.searchData;
+      this.componentDish$.filters.category = '';
+    } else if (data.searchValue === 2) {
+      this.componentDish$.filters.category = data.searchData;
+      this.componentDish$.filters.name = '';
+    }
     this.formatGetInputs();
   }
 

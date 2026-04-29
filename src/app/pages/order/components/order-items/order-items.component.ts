@@ -231,8 +231,8 @@ export class OrderItemsComponent {
 
     const index = this.editing
       ? this.details.findIndex(
-          (item) => item.orderDetailId === detail.orderDetailId
-        )
+        (item) => item.orderDetailId === detail.orderDetailId
+      )
       : this.details.findIndex((item) => item.dishId === dishId);
 
     if (index >= 0 && this.editing) {
@@ -254,39 +254,37 @@ export class OrderItemsComponent {
   deleteDetail(detail: OrderDetailResponse): void {
     Swal.fire({
       title: 'Eliminar item',
-      text: `Deseas retirar ${detail.dishName} de la orden?`,
+      text: `¿Deseas retirar ${detail.dishName} de la orden?`,
       icon: 'warning',
-      target: document.body,
-      customClass: {
-        container: 'swal-over-dialog',
-      },
-      didOpen: () => this.forceAlertOverDialog(),
+      target: document.querySelector('.cdk-global-overlay-wrapper') as HTMLElement || document.body,
       showCancelButton: true,
-      focusCancel: true,
       confirmButtonColor: '#004A89',
       cancelButtonColor: '#9c667d',
-      cancelButtonText: 'Cancelar',
       confirmButtonText: 'Si, eliminar',
-      width: 430,
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
+
+        // 1. Si el item es nuevo (ID temporal negativo)
         if (detail.orderDetailId < 0) {
-          this.details = this.details.filter(
-            (item) => item.orderDetailId !== detail.orderDetailId
-          );
+          // FILTRO CRÍTICO: Usamos el ID único temporal
+          this.details = this.details.filter(item => item.orderDetailId !== detail.orderDetailId);
           this.persistLocalDetails();
           return;
         }
 
-        this.orderDetailService.deleteOrderItem(
-          this.order.orderId,
-          detail.orderDetailId
-        ).subscribe(() => {
-          this.details = this.details.filter(
-            (item) => item.orderDetailId !== detail.orderDetailId
-          );
-          this.persistLocalDetails();
-        });
+        // 2. Si el item ya existe en la base de datos
+        this.orderDetailService.deleteOrderItem(this.order.orderId, detail.orderDetailId)
+          .subscribe({
+            next: () => {
+              // Filtramos solo el ID que devolvió el servidor como eliminado
+              this.details = this.details.filter(item => item.orderDetailId !== detail.orderDetailId);
+              this.persistLocalDetails();
+            },
+            error: (err) => {
+              this.alertService.error('Error', 'No se pudo eliminar el item del servidor');
+            }
+          });
       }
     });
   }
