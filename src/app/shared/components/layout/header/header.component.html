@@ -4,23 +4,7 @@
       <div class="search-container"></div>
     </div>
     <div class="head-content-right">
-      <div class="head-menu">
-        <div class="head-menu-item">
-          <button class="head-menu-item-btn ripple">
-            <i class="fal fa-address-book menu-icon"></i>
-          </button>
-        </div>
-        <div class="head-menu-item">
-          <button class="head-menu-item-btn ripple" [cdkMenuTriggerFor]="notificationOverlay">
-            <i class="fal fa-bell menu-icon"></i>
-          </button>
-        </div>
-        <div class="head-menu-item">
-          <button class="head-menu-item-btn ripple">
-            <i class="fal fa-bookmark menu-icon"></i>
-          </button>
-        </div>
-      </div>
+
       <div class="head-user-avatar-container">
         <div class="head-user-avatar" [cdkMenuTriggerFor]="userOverlay">
           <img src="public/avatar.jpg" alt="user" class="user-avatar" />
@@ -45,29 +29,7 @@
 </ng-template>
 
 <ng-template #notificationOverlay>
-  <div class="overlay overlay-notification overlay-fall" cdkMenu>
-    <ul>
-      <li class="notification-head-container">
-        <div class="notification-head">Notification</div>
-        <span class="view-all-link">
-          <a>View All</a>
-        </span>
-      </li>
-      @for (notification of notifications; track $index) {
-      <li class="notification-message-container" cdkMenuItem>
-        <i [class]="notification.icon"></i>
-        <div>
-          <div class="notification-subject">
-            {{ notification.subject }}
-          </div>
-          <p class="notification-desc">
-            {{ notification.description }}
-          </p>
-        </div>
-      </li>
-      }
-    </ul>
-  </div>
+
 </ng-template>
 
 <ng-template #userOverlay>

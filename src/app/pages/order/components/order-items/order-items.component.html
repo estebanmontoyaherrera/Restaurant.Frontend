@@ -6,88 +6,73 @@
 <mat-dialog-content>
   <div class="flex flex-col gap-4">
     <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
-      <div class="bg-am-main-blue-light rounded-2xl p-3">
-        <div class="text-xs text-am-gray">Camarero</div>
-        <div class="text-sm font-bold text-am-main-blue-dark">{{ order.waiterName }}</div>
+      <div class="bg-am-main-bluenew-light rounded-2xl p-3">
+        <div class="text-xs text-am-graynew">Camarero</div>
+        <div class="text-sm font-bold text-am-main-bluenew-dark">{{ order.waiterName }}</div>
       </div>
-      <div class="bg-am-main-blue-light rounded-2xl p-3">
-        <div class="text-xs text-am-gray">Estado</div>
-        <div class="text-sm font-bold text-am-main-blue-dark">{{ order.status }}</div>
+      <div class="bg-am-main-bluenew-light rounded-2xl p-3">
+        <div class="text-xs text-am-graynew">Estado</div>
+        <div class="text-sm font-bold text-am-main-bluenew-dark">{{ order.status }}</div>
       </div>
-      <div class="bg-am-main-blue-light rounded-2xl p-3">
-        <div class="text-xs text-am-gray">Items</div>
-        <div class="text-sm font-bold text-am-main-blue-dark">{{ details.length }}</div>
+      <div class="bg-am-main-bluenew-light rounded-2xl p-3">
+        <div class="text-xs text-am-graynew">Items</div>
+        <div class="text-sm font-bold text-am-main-bluenew-dark">{{ details.length }}</div>
       </div>
-      <div class="bg-am-main-blue-light rounded-2xl p-3">
-        <div class="text-xs text-am-gray">Total</div>
-        <div class="text-sm font-bold text-am-main-blue-dark">
+      <div class="bg-am-main-bluenew-light rounded-2xl p-3">
+        <div class="text-xs text-am-graynew">Total</div>
+        <div class="text-sm font-bold text-am-main-bluenew-dark">
           {{ total | currency : "USD" : "symbol" : "1.0-2" }}
         </div>
       </div>
     </div>
 
     @if (!canEditItems) {
-      <div class="rounded-2xl border border-am-new-orange-dark bg-am-new-orange-light px-4 py-3 text-sm text-am-new-orange-dark">
-        Los items solo se pueden modificar cuando la orden esta en estado Abierto.
-      </div>
+    <div
+      class="rounded-2xl border border-am-new-orange-dark bg-am-new-orange-light px-4 py-3 text-sm text-am-new-orange-dark">
+      Los items solo se pueden modificar cuando la orden esta en estado Abierto.
+    </div>
     }
 
     @if (canEditItems) {
-      <form [formGroup]="item" class="bg-white rounded-2xl border border-am-main-blue-light p-3">
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-3 items-start">
-          <div class="md:col-span-2" (focusout)="dishChanged()" (click)="dishChanged()">
-            <gs-select
-              label="Plato"
-              mode="create"
-              placeholder="Seleccionar plato"
-              [required]="true"
-              [aOptions]="dishes"
-              [inputControl]="item.get('dishId')"
-            />
-          </div>
-          <div>
-            <div class="text-am-purple md:text-sm text-xs">
-              Cantidad
-              <span class="text-red">*</span>
-            </div>
-            <mat-form-field appearance="outline" class="w-full">
-              <input matInput type="number" min="1" formControlName="quantity" />
-            </mat-form-field>
-          </div>
-          <div>
-            <div class="text-am-purple md:text-sm text-xs">Precio</div>
-            <mat-form-field appearance="outline" class="w-full">
-              <input matInput type="number" min="0" formControlName="unitPrice" />
-            </mat-form-field>
-          </div>
-          <div class="flex gap-2 items-end h-full pb-1">
-            <button
-              mat-button
-              class="bg-am-main-blue-dark text-white"
-              type="button"
-              (click)="saveItem()"
-            >
-              {{ editing ? "Actualizar" : "Agregar" }}
-            </button>
-            @if (editing) {
-              <button mat-button type="button" (click)="cancelEdit()">Cancelar</button>
-            }
-          </div>
+    <form [formGroup]="item" class="bg-white rounded-2xl border border-am-main-bluenew-light p-3">
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-3 items-start">
+        <div class="md:col-span-2" (focusout)="dishChanged()" (click)="dishChanged()">
+          <gs-select label="Plato" mode="create" placeholder="Seleccionar plato" [required]="true" [aOptions]="dishes"
+            [inputControl]="item.get('dishId')" />
         </div>
-        <div class="mt-2">
-          <gs-text
-            label="Notas"
-            mode="create"
-            [maxLength]="250"
-            [inputControl]="item.get('notes')"
-          />
+        <div>
+          <div class="text-am-purple md:text-sm text-xs">
+            Cantidad
+            <span class="text-red">*</span>
+          </div>
+          <mat-form-field appearance="outline" class="w-full">
+            <input matInput type="number" min="1" formControlName="quantity" />
+          </mat-form-field>
         </div>
-      </form>
+        <div>
+          <div class="text-am-purple md:text-sm text-xs">Precio</div>
+          <mat-form-field appearance="outline" class="w-full">
+            <input matInput type="number" min="0" formControlName="unitPrice" />
+          </mat-form-field>
+        </div>
+        <div class="flex gap-2 items-end h-full pb-1">
+          <button mat-button class="bg-am-main-bluenew-dark text-white" type="button" (click)="saveItem()">
+            {{ editing ? "Actualizar" : "Agregar" }}
+          </button>
+          @if (editing) {
+          <button mat-button type="button" (click)="cancelEdit()">Cancelar</button>
+          }
+        </div>
+      </div>
+      <div class="mt-2">
+        <gs-text label="Notas" mode="create" [maxLength]="250" [inputControl]="item.get('notes')" />
+      </div>
+    </form>
     }
 
-    <div class="overflow-auto rounded-2xl border border-am-main-blue-light">
+    <div class="overflow-auto rounded-2xl border border-am-main-bluenew-light">
       <table class="w-full bg-white">
-        <thead class="bg-am-main-blue-light text-am-main-blue-dark">
+        <thead class="bg-am-main-bluenew-light text-am-main-bluenew-dark">
           <tr>
             <th class="text-left text-xs font-bold p-3">Plato</th>
             <th class="text-left text-xs font-bold p-3">Cantidad</th>
@@ -95,39 +80,39 @@
             <th class="text-left text-xs font-bold p-3">Subtotal</th>
             <th class="text-left text-xs font-bold p-3">Notas</th>
             @if (canEditItems) {
-              <th class="text-left text-xs font-bold p-3">Acciones</th>
+            <th class="text-left text-xs font-bold p-3">Acciones</th>
             }
           </tr>
         </thead>
         <tbody>
           @for (detail of details; track detail.orderDetailId) {
-            <tr class="border-t border-am-main-blue-light">
-              <td class="text-xs p-3 font-bold">{{ detail.dishName }}</td>
-              <td class="text-xs p-3">{{ detail.quantity }}</td>
-              <td class="text-xs p-3">{{ detail.unitPrice | currency : "USD" : "symbol" : "1.0-2" }}</td>
-              <td class="text-xs p-3 font-bold">{{ detail.subtotal | currency : "USD" : "symbol" : "1.0-2" }}</td>
-              <td class="text-xs p-3">{{ detail.notes || "-" }}</td>
-              @if (canEditItems) {
-                <td class="text-xs p-3">
-                  <div class="flex gap-2">
-                    <button mat-icon-button type="button" (click)="editDetail(detail)">
-                      <mat-icon fontIcon="edit"></mat-icon>
-                    </button>
-                    <button mat-icon-button type="button" (click)="deleteDetail(detail)">
-                      <mat-icon fontIcon="delete"></mat-icon>
-                    </button>
-                  </div>
-                </td>
-              }
-            </tr>
+          <tr class="border-t border-am-main-bluenew-light">
+            <td class="text-xs p-3 font-bold">{{ detail.dishName }}</td>
+            <td class="text-xs p-3">{{ detail.quantity }}</td>
+            <td class="text-xs p-3">{{ detail.unitPrice | currency : "USD" : "symbol" : "1.0-2" }}</td>
+            <td class="text-xs p-3 font-bold">{{ detail.subtotal | currency : "USD" : "symbol" : "1.0-2" }}</td>
+            <td class="text-xs p-3">{{ detail.notes || "-" }}</td>
+            @if (canEditItems) {
+            <td class="text-xs p-3">
+              <div class="flex gap-2">
+                <button mat-icon-button type="button" (click)="editDetail(detail)">
+                  <mat-icon fontIcon="edit"></mat-icon>
+                </button>
+                <button mat-icon-button type="button" (click)="deleteDetail(detail)">
+                  <mat-icon fontIcon="delete"></mat-icon>
+                </button>
+              </div>
+            </td>
+            }
+          </tr>
           }
         </tbody>
       </table>
       @if (!details.length && !loading) {
-        <div class="p-8 text-center text-am-gray">Esta orden todavia no tiene items.</div>
+      <div class="p-8 text-center text-am-gray">Esta orden todavia no tiene items.</div>
       }
       @if (loading) {
-        <div class="p-8 text-center text-am-gray">Cargando items...</div>
+      <div class="p-8 text-center text-am-gray">Cargando items...</div>
       }
     </div>
   </div>

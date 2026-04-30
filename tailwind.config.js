@@ -78,9 +78,19 @@ module.exports = {
         background: "#F4F6FF",
       },
       "am-main-blue": {
-        DEFAULT: "#2271B3",
+        DEFAULT: "#1b1833",
         //light: "#f5f5f5ff",
-        dark: "#004A89",
+        dark: "#1b1833",
+      },
+      "am-main-bluenew": {
+        DEFAULT: "#2271B3",
+        light: "#004A89",
+        dark: "#ffffffff",
+      },
+      "am-graynew": {
+        DEFAULT: "#f5f5f5ff",
+        light: "#bebebe",
+        dark: "#666666",
       },
       "am-main-blue2": {
         DEFAULT: "#9775a2",
@@ -168,7 +178,7 @@ module.exports = {
         light: "#dbdcff",
         medium: "#927DEA",
         dark: "#465499",
-        DEFAULT: "#7084E3",
+        DEFAULT: "#020203ff",
       },
       "am-green": {
         light: "#77DEA2",

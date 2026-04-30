@@ -1,9 +1,9 @@
 <div class="w-full h-full login-fondo">
   <div class="login">
 
-    <h2>Iniciar Sesión</h2>
-    <h3>Bienvenido a tu sistema</h3>
-    <br />
+    <div class="logo-container">
+      <img src="public/logo.png" alt="Logo El Buen Sazón" class="logo-img">
+    </div>
     <form [formGroup]="form" class="login-form" (ngSubmit)="login()">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Usuario</mat-label>
