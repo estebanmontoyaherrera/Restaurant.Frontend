@@ -69,16 +69,17 @@ export class OrderItemsComponent {
   item!: FormGroup;
   dishes: SelectResponse[] = [];
   details: OrderDetailResponse[] = [];
+
   states$ = statesSelect;
   editing = false;
   loading = false;
   canEditItems = false;
-  private tempDetailId = -1;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.order = data.order;
     this.canEditItems = canEditOrderItems(this.order.status);
     this.initForm();
+
     this.item.get('dishId')?.valueChanges.subscribe(() => this.dishChanged());
   }
 
@@ -97,23 +98,42 @@ export class OrderItemsComponent {
     });
   }
 
+  // 🔹 CARGA INICIAL
   loadDishes(): void {
     this.selectsService.listDishSelect().subscribe((resp) => {
       this.dishes = resp;
-      this.loadLocalDetails();
+      this.loadItems();
     });
   }
 
-  loadLocalDetails(): void {
-    this.loading = false;
-    const cached = localStorage.getItem(this.storageKey);
-    this.details = cached ? JSON.parse(cached) : [];
+  // 🔹 BACKEND SOURCE OF TRUTH
+  loadItems(): void {
+    this.loading = true;
+
+    this.orderDetailService.getByOrderId(this.order.orderId).subscribe({
+      next: (resp) => {
+        const data = resp.data ?? [];
+
+        // 🔥 MAPEO CLAVE
+        this.details = data.map((item) => ({
+          ...item,
+          dishName:
+            item.dishName ??
+            this.dishes.find((d) => Number(d.code) === Number(item.dishId))
+              ?.description ??
+            `Plato ${item.dishId}`,
+        }));
+
+        this.loading = false;
+      },
+      error: () => {
+        this.details = [];
+        this.loading = false;
+      },
+    });
   }
 
-  persistLocalDetails(): void {
-    localStorage.setItem(this.storageKey, JSON.stringify(this.details));
-  }
-
+  // 🔹 TRAER PRECIO + NOMBRE
   dishChanged(): void {
     const dishId = Number(this.item.get('dishId')?.value);
     if (!dishId) return;
@@ -125,6 +145,7 @@ export class OrderItemsComponent {
 
   editDetail(detail: OrderDetailResponse): void {
     this.editing = true;
+
     this.item.patchValue({
       ...detail,
       dishId: this.getDishCode(detail.dishId),
@@ -150,9 +171,6 @@ export class OrderItemsComponent {
     }
 
     const data = this.item.getRawValue();
-    data.dishId = Number(data.dishId);
-    data.quantity = Number(data.quantity);
-    data.unitPrice = Number(data.unitPrice);
 
     if (this.editing) {
       this.updateItem(data);
@@ -162,139 +180,95 @@ export class OrderItemsComponent {
   }
 
   createItem(data: OrderDetailCreateRequest): void {
+    this.loading = true;
+
     const request: OrderDetailCreateRequest = {
-      dishId: data.dishId,
-      quantity: data.quantity,
+      dishId: Number(data.dishId),
+      quantity: Number(data.quantity),
       notes: data.notes,
     };
 
-    this.orderDetailService.addOrderItem(this.order.orderId, request).subscribe((resp) => {
-      this.afterSave(resp);
-    });
+    this.orderDetailService
+      .addOrderItem(this.order.orderId, request)
+      .subscribe({
+        next: (resp) => this.afterSave(resp),
+        error: () => (this.loading = false),
+      });
   }
 
   updateItem(data: OrderDetailUpdateRequest): void {
+    this.loading = true;
+
     const detailId = Number(data.orderDetailId);
+
     const request: OrderDetailUpdateRequest = {
-      dishId: data.dishId,
-      quantity: data.quantity,
-      unitPrice: data.unitPrice,
+      dishId: Number(data.dishId),
+      quantity: Number(data.quantity),
+      unitPrice: Number(data.unitPrice),
       notes: data.notes,
       state: data.state,
     };
 
-    if (detailId < 0) {
-      this.upsertLocalDetail();
-      this.cancelEdit();
-      return;
-    }
-
     this.orderDetailService
       .updateOrderItem(this.order.orderId, detailId, request)
-      .subscribe((resp) => this.afterSave(resp));
+      .subscribe({
+        next: (resp) => this.afterSave(resp),
+        error: () => (this.loading = false),
+      });
   }
 
   afterSave(resp: any): void {
     if (resp.isSuccess) {
       this.alertService.success('Excelente', resp.message);
-      this.upsertLocalDetail();
+      this.loadItems();
       this.cancelEdit();
     } else {
       this.alertService.warn('Atencion', resp.message);
+      this.loading = false;
     }
   }
 
-  upsertLocalDetail(): void {
-    const data = this.item.getRawValue();
-    const dishId = Number(data.dishId);
-    const quantity = Number(data.quantity);
-    const unitPrice = Number(data.unitPrice);
-    const dishName =
-      this.dishes.find((dish) => Number(dish.code) === dishId)?.description ??
-      `Plato ${dishId}`;
-
-    const detail: OrderDetailResponse = {
-      orderDetailId: this.editing ? Number(data.orderDetailId) : this.tempDetailId--,
-      orderId: this.order.orderId,
-      dishId,
-      dishName,
-      quantity,
-      unitPrice,
-      subtotal: quantity * unitPrice,
-      notes: data.notes,
-      state: data.state ?? '1',
-      stateDescription: 'Activo',
-      auditCreateDate: new Date().toISOString(),
-      icEdit: '',
-      icDelete: '',
-    };
-
-    const index = this.editing
-      ? this.details.findIndex(
-        (item) => item.orderDetailId === detail.orderDetailId
-      )
-      : this.details.findIndex((item) => item.dishId === dishId);
-
-    if (index >= 0 && this.editing) {
-      this.details[index] = detail;
-    } else if (index >= 0) {
-      this.details[index] = {
-        ...this.details[index],
-        quantity: this.details[index].quantity + quantity,
-        subtotal: (this.details[index].quantity + quantity) * unitPrice,
-        notes: data.notes,
-      };
-    } else {
-      this.details = [...this.details, detail];
-    }
-
-    this.persistLocalDetails();
-  }
-
+  // 🔥 DELETE CON POPUP BIEN POSICIONADO + NOMBRE
   deleteDetail(detail: OrderDetailResponse): void {
+    if (this.loading) return;
+
     Swal.fire({
       title: 'Eliminar item',
-      text: `¿Deseas retirar ${detail.dishName} de la orden?`,
+      text: `¿Deseas retirar "${detail.dishName}" de la orden?`,
       icon: 'warning',
-      target: document.querySelector('.cdk-global-overlay-wrapper') as HTMLElement || document.body,
+      target:
+        (document.querySelector('.cdk-global-overlay-wrapper') as HTMLElement) ||
+        document.body,
       showCancelButton: true,
       confirmButtonColor: '#004A89',
       cancelButtonColor: '#9c667d',
       confirmButtonText: 'Si, eliminar',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
+        this.loading = true;
 
-        // 1. Si el item es nuevo (ID temporal negativo)
-        if (detail.orderDetailId < 0) {
-          // FILTRO CRÍTICO: Usamos el ID único temporal
-          this.details = this.details.filter(item => item.orderDetailId !== detail.orderDetailId);
-          this.persistLocalDetails();
-          return;
-        }
-
-        // 2. Si el item ya existe en la base de datos
-        this.orderDetailService.deleteOrderItem(this.order.orderId, detail.orderDetailId)
+        this.orderDetailService
+          .deleteOrderItem(this.order.orderId, detail.orderDetailId)
           .subscribe({
             next: () => {
-              // Filtramos solo el ID que devolvió el servidor como eliminado
-              this.details = this.details.filter(item => item.orderDetailId !== detail.orderDetailId);
-              this.persistLocalDetails();
+              // 🔥 SOLO elimina el correcto
+              this.details = this.details.filter(
+                (x) => x.orderDetailId !== detail.orderDetailId
+              );
+              this.loading = false;
             },
-            error: (err) => {
-              this.alertService.error('Error', 'No se pudo eliminar el item del servidor');
-            }
+            error: () => {
+              this.loading = false;
+              this.alertService.error('Error', 'No se pudo eliminar');
+            },
           });
       }
     });
   }
 
   get total(): number {
-    return this.details.reduce((sum, detail) => sum + detail.subtotal, 0);
-  }
-
-  get storageKey(): string {
-    return `order-items-${this.order.orderId}`;
+    return this.details.reduce((sum, d) => sum + d.subtotal, 0);
   }
 
   private getDishCode(dishId: number): any {
@@ -302,22 +276,5 @@ export class OrderItemsComponent {
       this.dishes.find((dish) => Number(dish.code) === Number(dishId))?.code ??
       dishId
     );
-  }
-
-  private forceAlertOverDialog(): void {
-    const container = document.querySelector(
-      '.swal2-container'
-    ) as HTMLElement | null;
-    const popup = document.querySelector('.swal2-popup') as HTMLElement | null;
-
-    if (container) {
-      container.style.zIndex = '2147483647';
-      container.style.position = 'fixed';
-    }
-
-    if (popup) {
-      popup.style.zIndex = '2147483647';
-      popup.style.position = 'relative';
-    }
   }
 }

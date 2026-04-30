@@ -26,9 +26,8 @@ export class OrderDetailService {
     numPage: number = 1,
     getInputs: string = ''
   ): Observable<BaseApiResponse<OrderDetailResponse[]>> {
-    const requestUrl = `${env.apiIdentity}${
-      endpoint.LIST_ORDER_DETAILS
-    }?records=${size}&sort=${sort}&order=${order}&numPage=${numPage}${getInputs}`;
+    const requestUrl = `${env.apiIdentity}${endpoint.LIST_ORDER_DETAILS
+      }?records=${size}&sort=${sort}&order=${order}&numPage=${numPage}${getInputs}`;
 
     return this.httpClient
       .get<BaseApiResponse<OrderDetailResponse[]>>(requestUrl)
@@ -89,4 +88,15 @@ export class OrderDetailService {
   private orderItemsBaseUrl(): string {
     return env.apiIdentity.replace(/api\/$/i, '');
   }
+
+  getByOrderId(
+    orderId: number
+  ): Observable<BaseApiResponse<OrderDetailResponse[]>> {
+    const requestUrl = `${this.orderItemsBaseUrl()}orders/${orderId}/items`;
+
+    return this.httpClient
+      .get<BaseApiResponse<OrderDetailResponse[]>>(requestUrl)
+      .pipe(map((resp) => this.decorateDetails(resp)));
+  }
+
 }
