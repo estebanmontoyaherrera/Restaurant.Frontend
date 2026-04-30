@@ -190,23 +190,32 @@ export class OrderListComponent {
   }
 
   orderAdvance(orderData: OrderResponse) {
+    // VALIDACIÓN: Si el total es 0 o no tiene items, no puede avanzar
+    if (!orderData.total || orderData.total <= 0) {
+      Swal.fire({
+        title: 'Pedido vacío',
+        text: 'No puedes enviar a preparación una orden que no tiene platos agregados.',
+        icon: 'error',
+        confirmButtonColor: '#004A89',
+      });
+      return;
+    }
+
     const nextStatus = getNextOrderStatus(orderData.status);
     if (!nextStatus) {
       Swal.fire('Flujo completado', 'Esta orden ya esta cerrada.', 'info');
       return;
     }
 
+    // Si pasa las validaciones, procede con el Swal de confirmación
     Swal.fire({
       title: 'Avanzar estado',
-      text: `Deseas pasar la orden de ${orderData.status} a ${nextStatus}?`,
+      text: `¿Deseas pasar la orden de ${orderData.status} a ${nextStatus}?`,
       icon: 'warning',
       showCancelButton: true,
-      focusCancel: true,
       confirmButtonColor: '#004A89',
       cancelButtonColor: '#9c667d',
-      cancelButtonText: 'Cancelar',
       confirmButtonText: 'Si, avanzar',
-      width: 430,
     }).then((result) => {
       if (result.isConfirmed) {
         this.orderService.orderAdvanceStatus(orderData.orderId).subscribe(() => {

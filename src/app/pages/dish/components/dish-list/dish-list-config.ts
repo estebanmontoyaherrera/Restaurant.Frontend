@@ -121,7 +121,7 @@ const tableColumns: TableColumns<DishResponse>[] = [
     visible: true,
     download: true,
   },
- 
+
 ];
 
 const actionButtonDish: GenericButton = {
@@ -155,10 +155,10 @@ const menuItems: MenuFilterTable = {
   tooltip: 'Estados',
   menuItems: [
     {
-      label: 'Enabled',
+      label: 'Enabled', // Texto que ve el usuario
       icon: 'label',
       cssIcon: ['text-am-main-custom4-dark'],
-      value: STATUS.ENABLED,
+      value: STATUS.ENABLED, // Valor que usa la lógica de filtro
     },
     {
       label: 'Disabled',

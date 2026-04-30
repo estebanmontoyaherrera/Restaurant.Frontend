@@ -30,20 +30,27 @@ export class DishService extends DefaultService {
     numPage: number,
     getInputs: string
   ): Observable<BaseApiResponse<DishResponse[]>> {
-    const requestUrl = `${env.apiIdentity}${
-      endpoint.LIST_DISHES
-    }?records=${size}&sort=${sort}&order=${order}&numPage=${
-      numPage + 1
-    }${getInputs}`;
+    const requestUrl = `${env.apiIdentity}${endpoint.LIST_DISHES
+      }?records=${size}&sort=${sort}&order=${order}&numPage=${numPage + 1
+      }${getInputs}`;
 
     return this.httpClient.get<BaseApiResponse<DishResponse[]>>(requestUrl).pipe(
       map((resp) => {
         resp.data.forEach((dish: DishResponse) => {
+          // CAMBIO CLAVE: 
+          // 1er parámetro: 'Enabled'/'Disabled' mantiene el color morado/gris.
+          // 2do parámetro: Es el texto que se verá en la tabla en español.
           dish.availabilityDescription = getStateBadge(
             dish.isAvailable ? 'Enabled' : 'Disabled',
-            dish.isAvailable ? 'Disponible' : 'No disponible'
+            dish.isAvailable ? 'Habilitado' : 'Inhabilitado'
           );
-          dish.stateDescription = getStateBadge(dish.stateDescription);
+
+          // También corregimos el estado general para que sea coherente
+          dish.stateDescription = getStateBadge(
+            dish.stateDescription === 'Enabled' ? 'Enabled' : 'Disabled',
+            dish.stateDescription === 'Enabled' ? 'Habilitado' : 'Inhabilitado'
+          );
+
           dish.icEdit = getIcon('edit', 'Actualizar plato', true);
           dish.icToggle = getIcon(
             dish.isAvailable ? 'visibility_off' : 'visibility',
@@ -81,7 +88,7 @@ export class DishService extends DefaultService {
         if (resp.isSuccess) {
           this.alertService.success('Excelente', resp.message);
         } else {
-          this.alertService.warn('Atencion', resp.message);
+          this.alertService.warn('Atención', resp.message);
         }
       })
     );
@@ -94,7 +101,7 @@ export class DishService extends DefaultService {
         if (resp.isSuccess) {
           this.alertService.success('Excelente', resp.message);
         } else {
-          this.alertService.warn('Atencion', resp.message);
+          this.alertService.warn('Atención', resp.message);
         }
       })
     );
