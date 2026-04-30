@@ -13,13 +13,20 @@
   .logo-container {
     display: flex;
     align-items: center;
-    padding: 0.938rem 0.938rem 0 0.938rem;
+    justify-content: center;
+    padding: 0.938rem;
     width: 100%;
+
 
     .head {
       display: flex;
-      gap: 20px;
-      padding-bottom: 20px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+      gap: 1px;
+      padding-bottom: 16px;
 
       // border-bottom: 1px solid #fafdff;
       .logo {
@@ -36,15 +43,18 @@
 
       .user-details {
         .title {
-          font-size: 10px;
-          font-weight: 500;
-          color: #757575;
-          text-transform: uppercase;
+          font-size: 14px;
+          font-weight: 600;
+          letter-spacing: 1.2px; // 👈 look más premium
+          color: #8b8aa3; // 👈 gris más fino que #757575
+
         }
 
         .name {
-          font-size: 14px;
-          font-weight: 500;
+          font-size: 18px; // 👈 sube protagonismo
+          font-weight: 600; // 👈 más presencia sin ser pesado
+          color: #fafdff;
+          line-height: 1.2; // 👈 compacto elegante
         }
       }
     }

@@ -79,7 +79,7 @@ module.exports = {
       },
       "am-main-blue": {
         DEFAULT: "#2271B3",
-        light: "#A3D0F6",
+        //light: "#f5f5f5ff",
         dark: "#004A89",
       },
       "am-main-blue2": {
@@ -98,9 +98,9 @@ module.exports = {
         dark: "#AB4459",
       },
       "am-main-custom3": {
-        DEFAULT: "#cd813f",
+        DEFAULT: "#ffffffff",
         light: "#F29F58",
-        dark: "#F29F58",
+        dark: "#1b1833",
       },
       "am-main-custom4": {
         DEFAULT: "#ffffff",
@@ -129,7 +129,7 @@ module.exports = {
       },
       "am-new-orange": {
         DEFAULT: "#f78842",
-        light: "#fbc3a0",
+        //light: "#fbc3a0",
         dark: "#af5f2e",
       },
       "am-coral": {
@@ -144,7 +144,7 @@ module.exports = {
       },
       "am-new-red": {
         DEFAULT: "#de7777",
-        light: "#f2b0b0",
+        //light: "#f2b0b0",
         dark: "#ac3d3d",
       },
       "am-new-yellow": {
