@@ -46,11 +46,12 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
 
 
       return from(
-        Swal.fire(
-          'Error Desconocido',
-          'Ha ocurrido un error inesperado.',
-          'error'
-        )
+        Swal.fire({
+          title: 'Error Desconocido',
+          text: 'Ha ocurrido un error inesperado.',
+          icon: 'error',
+          target: document.querySelector('.cdk-overlay-container') as HTMLElement
+        })
       ).pipe(switchMap(() => throwError(() => err)));
     })
   );

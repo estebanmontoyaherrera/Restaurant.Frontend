@@ -103,8 +103,8 @@ export enum COLORS_BADGE {
 }
 
 export const statesSelect: SelectResponse[] = [
-  { code: '1', description: 'Enabled' },
-  { code: '2', description: 'Disabled' },
+  { code: '1', description: 'Activo' },
+  { code: '2', description: 'Inactivo' },
 ];
 
 export const errorMessages: Record<

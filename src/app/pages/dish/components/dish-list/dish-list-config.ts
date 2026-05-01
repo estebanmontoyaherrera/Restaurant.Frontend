@@ -155,13 +155,13 @@ const menuItems: MenuFilterTable = {
   tooltip: 'Estados',
   menuItems: [
     {
-      label: 'Enabled', // Texto que ve el usuario
+      label: 'Activo', // Texto que ve el usuario
       icon: 'label',
       cssIcon: ['text-am-main-custom4-dark'],
       value: STATUS.ENABLED, // Valor que usa la lógica de filtro
     },
     {
-      label: 'Disabled',
+      label: 'Inactivo',
       icon: 'label',
       cssIcon: ['text-am-gray-light'],
       value: STATUS.DISABLED,

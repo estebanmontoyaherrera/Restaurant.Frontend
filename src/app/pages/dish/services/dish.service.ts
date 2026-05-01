@@ -37,19 +37,12 @@ export class DishService extends DefaultService {
     return this.httpClient.get<BaseApiResponse<DishResponse[]>>(requestUrl).pipe(
       map((resp) => {
         resp.data.forEach((dish: DishResponse) => {
-          // CAMBIO CLAVE: 
-          // 1er parámetro: 'Enabled'/'Disabled' mantiene el color morado/gris.
-          // 2do parámetro: Es el texto que se verá en la tabla en español.
+
           dish.availabilityDescription = getStateBadge(
-            dish.isAvailable ? 'Enabled' : 'Disabled',
+            dish.isAvailable ? 'Activo' : 'Inactivo',
             dish.isAvailable ? 'Habilitado' : 'Inhabilitado'
           );
 
-          // También corregimos el estado general para que sea coherente
-          dish.stateDescription = getStateBadge(
-            dish.stateDescription === 'Enabled' ? 'Enabled' : 'Disabled',
-            dish.stateDescription === 'Enabled' ? 'Habilitado' : 'Inhabilitado'
-          );
 
           dish.icEdit = getIcon('edit', 'Actualizar plato', true);
           dish.icToggle = getIcon(

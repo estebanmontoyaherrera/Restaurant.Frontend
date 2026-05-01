@@ -19,6 +19,7 @@ export function getStateBadge(label: string, tooltip?: string) {
       'PUNTUAL',
       'PRESENCIAL',
       'ACTIVO',
+      'Activo',
       'APROBADO',
       'RENOVADO',
       'EXTRAS',
