@@ -117,7 +117,7 @@ const tableColumns: TableColumns<OrderResponse>[] = [
     visible: true,
     download: true,
   },
- 
+
 ];
 
 const actionButtonOrder: GenericButton = {
@@ -142,18 +142,11 @@ const menuItems: MenuFilterTable = {
   icon: 'filter_list',
   tooltip: 'Estados',
   menuItems: [
-    {
-      label: 'Activo',
-      icon: 'label',
-      cssIcon: ['text-am-main-custom4-dark'],
-      value: STATUS.ENABLED,
-    },
-    {
-      label: 'Inactivo',
-      icon: 'label',
-      cssIcon: ['text-am-gray-light'],
-      value: STATUS.DISABLED,
-    },
+    { label: 'Abierto', icon: 'label', cssIcon: ['text-green-500'], value: 'Abierto' },
+    { label: 'En Preparación', icon: 'label', cssIcon: ['text-orange-500'], value: 'En Preparación' },
+    { label: 'Listo', icon: 'label', cssIcon: ['text-teal-500'], value: 'Listo' },
+    { label: 'Entregado', icon: 'label', cssIcon: ['text-blue-500'], value: 'Entregado' },
+    { label: 'Cerrado', icon: 'label', cssIcon: ['text-gray-400'], value: 'Cerrado' },
   ],
 };
 
@@ -178,7 +171,7 @@ const filterButtons: SplitButton[] = [
 
 const initFilters = {
   waiterName: '',
-  stateFilter: STATUS.ENABLED + '-' + STATUS.DISABLED,
+  statusFilter: '', // 👈 NUEVO
   startDate: '',
   endDate: '',
   refresh: false,

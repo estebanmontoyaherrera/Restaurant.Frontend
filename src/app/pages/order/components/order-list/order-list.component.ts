@@ -54,8 +54,8 @@ export class OrderListComponent {
   formatGetInputs() {
     let str = '';
 
-    if (this.componentOrder$.filters.stateFilter != null) {
-      str += `&stateFilter=${this.componentOrder$.filters.stateFilter}`;
+    if (this.componentOrder$.filters.statusFilter != null) {
+      str += `&statusFilter=${this.componentOrder$.filters.statusFilter}`;
     }
 
     if (this.componentOrder$.filters.waiterName) {
@@ -87,9 +87,9 @@ export class OrderListComponent {
 
   setDataFilterStates(data: []) {
     if (data.length) {
-      this.componentOrder$.filters.stateFilter = data.join('-');
+      this.componentOrder$.filters.statusFilter = data.join('-');
     } else {
-      this.componentOrder$.filters.stateFilter = '0';
+      this.componentOrder$.filters.statusFilter = '';
     }
 
     this.formatGetInputs();
