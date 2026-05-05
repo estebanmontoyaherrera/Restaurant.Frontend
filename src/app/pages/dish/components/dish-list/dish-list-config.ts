@@ -104,7 +104,23 @@ const tableColumns: TableColumns<DishResponse>[] = [
     visible: true,
     download: true,
   },
-
+  {
+    label: 'Fecha de creacion',
+    cssLabel: ['font-bold', 'text-sm', 'text-am-main-blue-dark'],
+    property: 'auditCreateDate',
+    cssProperty: [
+      'text-xs',
+      'uppercase',
+      'font-bold',
+      'whitespace-normal',
+      'max-w-120',
+    ],
+    type: 'datetime',
+    sticky: false,
+    sort: true,
+    visible: true,
+    download: true,
+  },
 
 ];
 
