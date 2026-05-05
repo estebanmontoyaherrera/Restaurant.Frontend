@@ -104,23 +104,7 @@ const tableColumns: TableColumns<DishResponse>[] = [
     visible: true,
     download: true,
   },
-  {
-    label: 'Fecha de creacion',
-    cssLabel: ['font-bold', 'text-sm', 'text-am-main-blue-dark'],
-    property: 'auditCreateDate',
-    cssProperty: [
-      'text-xs',
-      'uppercase',
-      'font-bold',
-      'whitespace-normal',
-      'max-w-120',
-    ],
-    type: 'datetime',
-    sticky: false,
-    sort: true,
-    visible: true,
-    download: true,
-  },
+
 
 ];
 
@@ -150,21 +134,21 @@ const searchOptions = [
 ];
 
 const menuItems: MenuFilterTable = {
-  label: 'Estados',
+  label: 'Disponibilidad',
   icon: 'filter_list',
-  tooltip: 'Estados',
+  tooltip: 'Disponibilidad',
   menuItems: [
     {
-      label: 'Activo', // Texto que ve el usuario
+      label: 'Activo',
       icon: 'label',
       cssIcon: ['text-am-main-custom4-dark'],
-      value: STATUS.ENABLED, // Valor que usa la lógica de filtro
+      value: '1',
     },
     {
       label: 'Inactivo',
       icon: 'label',
       cssIcon: ['text-am-gray-light'],
-      value: STATUS.DISABLED,
+      value: '0',
     },
   ],
 };
@@ -191,14 +175,14 @@ const filterButtons: SplitButton[] = [
 const initFilters = {
   name: '',
   category: '',
-  stateFilter: STATUS.ENABLED + '-' + STATUS.DISABLED,
+  availabilityFilter: '1-0',
   refresh: false,
 };
 
 const filters = {
   name: '',
   category: '',
-  stateFilter: STATUS.ENABLED + '-' + STATUS.DISABLED,
+  availabilityFilter: '1-0',
   refresh: false,
 };
 

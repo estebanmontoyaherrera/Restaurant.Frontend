@@ -57,7 +57,9 @@ export class DishListComponent {
     if (this.componentDish$.filters.category) {
       str += `&category=${this.componentDish$.filters.category}`;
     }
-
+    if (this.componentDish$.filters.availabilityFilter != null) {
+      str += `&availabilityFilter=${this.componentDish$.filters.availabilityFilter}`;
+    }
     if (this.componentDish$.filters.stateFilter != null) {
       str += `&stateFilter=${this.componentDish$.filters.stateFilter}`;
     }
@@ -84,9 +86,9 @@ export class DishListComponent {
 
   setDataFilterStates(data: []) {
     if (data.length) {
-      this.componentDish$.filters.stateFilter = data.join('-');
+      this.componentDish$.filters.availabilityFilter = data.join('-');
     } else {
-      this.componentDish$.filters.stateFilter = '0';
+      this.componentDish$.filters.availabilityFilter = '';
     }
 
     this.formatGetInputs();
