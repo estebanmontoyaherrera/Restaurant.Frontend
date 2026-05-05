@@ -63,6 +63,13 @@ export class DishManagementComponent {
   dish!: FormGroup;
   dishDialog;
   states$ = statesSelect;
+  categories$ = [
+    { code: 'Entradas', description: 'Entradas' },
+    { code: 'Platos Fuertes', description: 'Platos Fuertes' },
+    { code: 'Sopas', description: 'Sopas' },
+    { code: 'Bebidas', description: 'Bebidas' },
+    { code: 'Postres', description: 'Postres' },
+  ];
 
   initForm(): void {
     this.dish = this.fb$.group({
@@ -70,9 +77,10 @@ export class DishManagementComponent {
       name: new FormControl(null),
       description: new FormControl(null),
       price: new FormControl(null, [Validators.required, Validators.min(0.01)]),
-      category: new FormControl(null),
+      category: new FormControl(null, Validators.required),
       isAvailable: new FormControl(true),
       state: new FormControl('1'),
+
     });
   }
 
