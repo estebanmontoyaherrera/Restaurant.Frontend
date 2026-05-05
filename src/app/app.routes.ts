@@ -5,6 +5,13 @@ import { RoleManagementComponent } from './pages/role/components/role-management
 
 const childrenRoutes: Routes = [
   {
+    path: 'home',
+    loadComponent: () =>
+      import('./pages/home/home.component').then(
+        (c) => c.HomeComponent
+      ),
+  },
+  {
     path: 'users',
     loadComponent: () =>
       import('./pages/user/components/user-list/user-list.component').then(
@@ -65,7 +72,7 @@ const childrenRoutes: Routes = [
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'home',
     pathMatch: 'full',
   },
   {
